@@ -1,18 +1,17 @@
-import { parse } from 'cookie';
-
-export function io(input: string): string {
-	try {
-		const result = parseBlock([...input], undefined);
-		return `${JSON.stringify(result, null, 2)}`;
-	} catch (error) {
-		return `${error}`;
+export function parseTop(input: string): Block<string> | string {
+	const filteredInput = input.replace(/\s+/g, '');
+	const result = parseBlock([...filteredInput], undefined);
+	if (typeof result === 'string') {
+		return result;
+	} else {
+		return result.block;
 	}
 }
 
 function parseBlock(
 	[head, ...tail]: string[],
 	delimiter: string | undefined
-): { block: Block<string>; tail: string[] } {
+): { block: Block<string>; tail: string[] } | string {
 	let bind = false;
 	let block: Block<string> = [];
 	let id = '';
@@ -21,8 +20,8 @@ function parseBlock(
 			if (id !== '') {
 				block.push({ type: bind ? 'bind' : 'var', id });
 				id = '';
-			} else {
-				throw new Error(`Attempted to bind with no body. Or no binder name.`);
+			} else if (block.length === 0) {
+				return `Attempted to bind with no body. Or no binder name.`;
 			}
 			bind = true;
 		} else if (['<', '>', '(', ')'].includes(head)) {
@@ -31,18 +30,18 @@ function parseBlock(
 				id = '';
 			}
 			if (['<', '('].includes(head)) {
-				try {
-					let { block: b, tail: t } = parseBlock(tail, head === '(' ? ')' : '>');
-					block.push({ type: head === '(' ? 'apply' : 'inject', block: b });
-					tail = t;
-				} catch (error) {
-					throw error;
+				let result = parseBlock(tail, head === '(' ? ')' : '>');
+				if (typeof result === 'string') {
+					return result;
+				} else {
+					block.push({ type: head === '(' ? 'apply' : 'inject', block: result.block });
+					tail = result.tail;
 				}
 			} else {
 				if (delimiter === head) {
 					return { block, tail };
 				} else {
-					throw new Error(`Unexpected closing brace: ${head}`);
+					return `Unexpected closing brace: ${head}`;
 				}
 			}
 		} else {
@@ -57,7 +56,7 @@ function parseBlock(
 	if (delimiter === undefined) {
 		return { block, tail };
 	} else {
-		throw new Error(`Expected closing brace: ${delimiter === '>' ? '>' : ')'}`);
+		return `Expected closing brace: ${delimiter === '>' ? '>' : ')'}`;
 	}
 }
 
@@ -68,8 +67,8 @@ type Token<T> =
 	| { type: 'apply'; block: Block<T> }
 	| { type: 'inject'; block: Block<T> };
 
-type Expr<T> =
-	| { type: 'var'; id: T }
-	| { type: 'bind'; context: Expr<T>; id: T }
-	| { type: 'apply'; context: Expr<T>; arg: Expr<T> }
-	| { type: 'inject'; context: Expr<T>; fun: Expr<T> };
+// type Expr<T> =
+// 	| { type: 'var'; id: T }
+// 	| { type: 'bind'; context: Expr<T>; id: T }
+// 	| { type: 'apply'; context: Expr<T>; arg: Expr<T> }
+// 	| { type: 'inject'; context: Expr<T>; fun: Expr<T> };

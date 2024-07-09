@@ -1,6 +1,6 @@
 <script>
-	import { io } from '../lib/io';
-
+	import { parseTop } from '../lib/io';
+	import Block from '../lib/block.svelte';
 	let input = `2 <+> (3)
 
 λ3 (
@@ -84,6 +84,17 @@
 					placeholder:text-indigo-200
 					"
 				></textarea>
+				<!-- <div
+					class="
+					flex-1
+					bg-indigo-100
+					selection:text-indigo-100
+					p-4
+					rounded-lg
+					"
+				>
+					<Block block={parseTop(input)} />
+				</div> -->
 				<pre
 					class="
 					flex-1
@@ -94,7 +105,7 @@
 
 					text-wrap
 					{input ? '' : 'text-indigo-200'}
-					">{input ? io(input) : 'λ code comes out'}</pre>
+					">{input ? JSON.stringify(parseTop(input), null, 2) : 'λ code comes out'}</pre>
 			</div>
 		</div>
 	</div>
