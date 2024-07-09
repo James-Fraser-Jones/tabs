@@ -74,12 +74,12 @@ Novel syntax
 <v> ::= [a-z]
 ```
 
-Better syntax
+## Better syntax
 
 ```
-<e> ::= <e> " λ" <v>
-      | <e> " (" <e> ")"
-      | <e> " <" <e> ">"
+<e> ::= <e> "λ" <v>
+      | <e> "(" <e> ")"
+      | <e> "<" <e> ">"
       | <v>
 
 <v> ::= [a-z]

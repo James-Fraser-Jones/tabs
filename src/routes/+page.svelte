@@ -41,7 +41,7 @@
 	p-4
 	break-all
 
-	text-2xl
+	text-md
 	font-mono
 	text-indigo-900
 	selection:bg-indigo-600
