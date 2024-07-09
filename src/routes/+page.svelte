@@ -38,7 +38,7 @@
 	selection:text-indigo-50
 	h-screen
 	w-screen
-	p-8
+	p-4
 	break-all
 
 	text-2xl
@@ -48,13 +48,26 @@
 
 	flex
 	flex-col
-	gap-8
+	gap-4
 	"
 >
 	<h1 class="text-4xl flex-none font-bold">λ with tabs!</h1>
 	<div class="flex-1 relative">
-		<div class="absolute inset-0 overflow-auto">
-			<div class="flex gap-8">
+		<div
+			class="
+			absolute inset-0 overflow-auto border-2
+			border-indigo-900
+			focus:border-indigo-600
+			rounded-lg
+			"
+		>
+			<div
+				class="
+				flex
+				gap-4
+				min-h-full
+				"
+			>
 				<textarea
 					bind:value={input}
 					placeholder="λ code goes in"
@@ -62,13 +75,10 @@
 					flex-1
 					bg-indigo-100
 					selection:text-indigo-100
-					p-8
+					p-4
 					rounded-lg
 					
 					overflow-hidden
-					border-2
-					border-indigo-900
-					focus:border-indigo-600
 					outline-none
 					resize-none
 					placeholder:text-indigo-200
@@ -79,7 +89,7 @@
 					flex-1
 					bg-indigo-100
 					selection:text-indigo-100
-					p-8
+					p-4
 					rounded-lg
 
 					text-wrap
