@@ -1,5 +1,5 @@
 <script>
-	import { parseTop } from '../lib/io';
+	import { parseTop, parseExpr } from '../lib/io';
 	import Block from '../lib/block.svelte';
 	let input = `2 <+> (3)
 
@@ -55,9 +55,11 @@
 	<div class="flex-1 relative">
 		<div
 			class="
-			absolute inset-0 overflow-auto border-2
+			absolute
+			inset-0
+			overflow-auto
+			border-2
 			border-indigo-900
-			focus:border-indigo-600
 			rounded-lg
 			"
 		>
@@ -93,7 +95,7 @@
 					rounded-lg
 					"
 				>
-					<Block block={parseTop(input)} />
+					<Block result={parseTop(input)} />
 				</div> -->
 				<pre
 					class="
@@ -105,7 +107,7 @@
 
 					text-wrap
 					{input ? '' : 'text-indigo-200'}
-					">{input ? JSON.stringify(parseTop(input), null, 2) : 'λ code comes out'}</pre>
+					">{input ? parseExpr(input) : 'λ code comes out'}</pre>
 			</div>
 		</div>
 	</div>

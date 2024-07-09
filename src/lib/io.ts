@@ -1,3 +1,60 @@
+export function parseExpr(input: string): string {
+	const result = parseTop(input);
+	if (typeof result === 'string') {
+		return result;
+	} else {
+		const result2 = blockToExpr(result);
+		if (typeof result2 === 'string') {
+			return result2;
+		} else {
+			return JSON.stringify(result2, null, 2);
+		}
+	}
+}
+
+function blockToExpr<T>(block: Block<T>): Expr<T> | string {
+	if (block.length === 0) {
+		return 'Empty block';
+	} else {
+		let [head, ...tail] = [...block].reverse(); //TODO: fix this
+		let contextResult;
+		switch (head.type) {
+			case 'var':
+				if (tail.length === 0) {
+					return { type: 'var', id: head.id };
+				} else {
+					return `Open var, ${head.id}, with extraneous context, ${JSON.stringify(tail, null, 2)}`;
+				}
+			case 'bind':
+				contextResult = blockToExpr(tail);
+				if (typeof contextResult === 'string') {
+					return contextResult;
+				}
+				return { type: 'bind', context: contextResult, id: head.id };
+			case 'apply':
+				contextResult = blockToExpr(tail);
+				if (typeof contextResult === 'string') {
+					return contextResult;
+				}
+				let argResult = blockToExpr(head.block);
+				if (typeof argResult === 'string') {
+					return argResult;
+				}
+				return { type: 'apply', context: contextResult, arg: argResult };
+			case 'inject':
+				contextResult = blockToExpr(tail);
+				if (typeof contextResult === 'string') {
+					return contextResult;
+				}
+				let funResult = blockToExpr(head.block);
+				if (typeof funResult === 'string') {
+					return funResult;
+				}
+				return { type: 'inject', context: contextResult, fun: funResult };
+		}
+	}
+}
+
 export function parseTop(input: string): Block<string> | string {
 	const filteredInput = input.replace(/\s+/g, '');
 	const result = parseBlock([...filteredInput], undefined);
@@ -15,6 +72,7 @@ function parseBlock(
 	let bind = false;
 	let block: Block<string> = [];
 	let id = '';
+
 	while (head) {
 		if (head === 'λ') {
 			if (id !== '') {
@@ -47,8 +105,10 @@ function parseBlock(
 		} else {
 			id += head;
 		}
+
 		[head, ...tail] = tail;
 	}
+
 	if (id !== '') {
 		block.push({ type: bind ? 'bind' : 'var', id });
 		id = '';
@@ -67,8 +127,8 @@ type Token<T> =
 	| { type: 'apply'; block: Block<T> }
 	| { type: 'inject'; block: Block<T> };
 
-// type Expr<T> =
-// 	| { type: 'var'; id: T }
-// 	| { type: 'bind'; context: Expr<T>; id: T }
-// 	| { type: 'apply'; context: Expr<T>; arg: Expr<T> }
-// 	| { type: 'inject'; context: Expr<T>; fun: Expr<T> };
+type Expr<T> =
+	| { type: 'var'; id: T }
+	| { type: 'bind'; context: Expr<T>; id: T }
+	| { type: 'apply'; context: Expr<T>; arg: Expr<T> }
+	| { type: 'inject'; context: Expr<T>; fun: Expr<T> };
