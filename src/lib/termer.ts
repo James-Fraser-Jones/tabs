@@ -53,7 +53,13 @@ function makeTerms(
 		}
 		[token, ...tokens] = tokens;
 	}
-	return { terms, tokens };
+	if (scope) {
+		return `Term - Expected closing brace ${scope == TermKind.Apply ? ')' : '>'}`;
+	} else if (bind) {
+		return `Term - Binder missing an identifier`;
+	} else {
+		return { terms, tokens };
+	}
 }
 
 export function termize(tokens: Token[]): Term[] | error {
