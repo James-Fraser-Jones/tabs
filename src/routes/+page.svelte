@@ -1,6 +1,7 @@
 <script>
 	import { io, ioError } from '$lib/main';
 	import Main from '../components/main.svelte';
+	import { tick } from 'svelte';
 	let input = `2 <+> (3)
 
 λ3 (
@@ -30,6 +31,15 @@
     z
     λz λs
 )`;
+	async function handleKeydown(event) {
+		if (event.key !== '\\') return;
+		event.preventDefault();
+		const { selectionStart, selectionEnd } = this;
+		input = input.slice(0, selectionStart) + 'λ' + input.slice(selectionEnd);
+		await tick();
+		this.selectionStart = selectionStart + 1;
+		this.selectionEnd = selectionStart + 1;
+	}
 </script>
 
 <div
@@ -51,7 +61,39 @@
 	gap-4
 	"
 >
-	<h1 class="text-4xl flex-none font-bold">λ with tabs!</h1>
+	<div class="flex-none flex gap-4">
+		<h1 class="text-4xl grow font-bold">λ with tabs!</h1>
+		<button
+			class="
+			bg-indigo-200
+			border-2
+			border-indigo-900
+			rounded-lg
+			w-20
+			text-bold
+			text-4xl
+			drop-shadow-lg
+			hover:drop-shadow-xl
+			active:bg-indigo-300
+			active:drop-shadow-none
+			">{'<'}</button
+		>
+		<button
+			class="
+			bg-indigo-200
+			border-2
+			border-indigo-900
+			rounded-lg
+			w-20
+			text-bold
+			text-4xl
+			drop-shadow-lg
+			hover:drop-shadow-xl
+			active:bg-indigo-300
+			active:drop-shadow-none
+			">{'>'}</button
+		>
+	</div>
 	<div class="flex-1 relative">
 		<div
 			class="
@@ -72,6 +114,7 @@
 			>
 				<textarea
 					bind:value={input}
+					on:keydown={handleKeydown}
 					placeholder="λ code goes in"
 					class="
 					flex-1
@@ -86,20 +129,21 @@
 					placeholder:text-indigo-200
 					"
 				></textarea>
-				<!-- <div
+				<div
 					class="
 					flex-1
 					bg-indigo-100
 					selection:text-indigo-100
 					p-4
 					rounded-lg
+					
 					flex
 					justify-start
 					items-start
 					"
 				>
 					<Main {input} />
-				</div> -->
+				</div>
 				<pre
 					class="
 					flex-1
