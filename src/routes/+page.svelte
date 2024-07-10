@@ -1,6 +1,6 @@
 <script>
 	import { io } from '$lib/main';
-	import Block from '$lib/block.svelte';
+	import Main from '../components/main.svelte';
 	let input = `2 <+> (3)
 
 λ3 (
@@ -95,7 +95,7 @@
 					rounded-lg
 					"
 				>
-					<Block {input} />
+					<Main {input} />
 				</div>
 				<!-- <pre
 					class="
