@@ -1,5 +1,5 @@
 <script>
-	import { io } from '$lib/main';
+	import { io, ioError } from '$lib/main';
 	import Main from '../components/main.svelte';
 	let input = `2 <+> (3)
 
@@ -93,6 +93,9 @@
 					selection:text-indigo-100
 					p-4
 					rounded-lg
+					flex
+					justify-start
+					items-start
 					"
 				>
 					<Main {input} />
@@ -107,7 +110,7 @@
 
 					text-wrap
 					{input ? '' : 'text-indigo-200'}
-					">{input ? io(input) : 'λ code comes out'}</pre> -->
+					">{input ? ioError(input) : 'λ code comes out'}</pre> -->
 			</div>
 		</div>
 	</div>
