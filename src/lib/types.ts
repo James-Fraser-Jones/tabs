@@ -1,21 +1,24 @@
-export enum ElemKind {
+export type Expr =
+	| { kind: TermKind.Var; value: string }
+	| { kind: TermKind.Bind; context: Expr; value: string }
+	| { kind: TermKind.Apply; context: Expr; value: Expr }
+	| { kind: TermKind.Inject; context: Expr; value: Expr };
+
+//===========================================================================
+
+export enum TermKind {
 	Var = 'VAR',
 	Bind = 'BIND',
 	Apply = 'APPLY',
 	Inject = 'INJECT'
 }
-export type Elem =
-	| { kind: ElemKind.Var; value: string }
-	| { kind: ElemKind.Bind; value: string }
-	| { kind: ElemKind.Apply; value: Scope }
-	| { kind: ElemKind.Inject; value: Scope };
+export type Term =
+	| { kind: TermKind.Var; value: string }
+	| { kind: TermKind.Bind; value: string }
+	| { kind: TermKind.Apply; value: Term[] }
+	| { kind: TermKind.Inject; value: Term[] };
 
-export enum ScopeKind {
-	Top = 'TOP',
-	Apply = 'APPLY',
-	Inject = 'INJECT'
-}
-export type Scope = { kind: ScopeKind; value: Elem[] };
+//===========================================================================
 
 export type Token =
 	| { kind: TokenKind.Keyword; value: Keyword }
@@ -41,5 +44,7 @@ export enum Whitespace {
 	Newline = '\n'
 }
 export const whitespace = Object.values(Whitespace).map((name) => name.toString());
+
+//===========================================================================
 
 export type error = string;
