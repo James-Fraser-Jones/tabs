@@ -33,6 +33,6 @@ function mergeAllTokens(tokens: Token[]): Token[] {
 	}
 }
 
-export function tokenize(block: string): Token[] {
-	return mergeAllTokens([...block].map(makeToken));
+export function tokenize(input: string): Token[] {
+	return mergeAllTokens([...input].map(makeToken));
 }

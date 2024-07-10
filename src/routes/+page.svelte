@@ -1,5 +1,6 @@
 <script>
 	import { io } from '$lib/main';
+	import Block from '$lib/block.svelte';
 	let input = `2 <+> (3)
 
 λ3 (
@@ -85,7 +86,7 @@
 					placeholder:text-indigo-200
 					"
 				></textarea>
-				<!-- <div
+				<div
 					class="
 					flex-1
 					bg-indigo-100
@@ -94,9 +95,9 @@
 					rounded-lg
 					"
 				>
-					<Block result={parseTop(input)} />
-				</div> -->
-				<pre
+					<Block {input} />
+				</div>
+				<!-- <pre
 					class="
 					flex-1
 					bg-indigo-100
@@ -106,7 +107,7 @@
 
 					text-wrap
 					{input ? '' : 'text-indigo-200'}
-					">{input ? io(input) : 'λ code comes out'}</pre>
+					">{input ? io(input) : 'λ code comes out'}</pre> -->
 			</div>
 		</div>
 	</div>

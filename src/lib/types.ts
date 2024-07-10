@@ -20,15 +20,15 @@ export type Term =
 
 //===========================================================================
 
-export type Token =
-	| { kind: TokenKind.Keyword; value: Keyword }
-	| { kind: TokenKind.Whitespace; value: string }
-	| { kind: TokenKind.Identifier; value: string };
 export enum TokenKind {
 	Keyword = 'KEYWORD',
 	Whitespace = 'WHITESPACE',
 	Identifier = 'IDENTIFIER'
 }
+export type Token =
+	| { kind: TokenKind.Keyword; value: Keyword }
+	| { kind: TokenKind.Whitespace; value: string }
+	| { kind: TokenKind.Identifier; value: string };
 
 export enum Keyword {
 	OpenBrace = '(',
