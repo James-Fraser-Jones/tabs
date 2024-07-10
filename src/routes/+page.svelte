@@ -1,6 +1,8 @@
 <script>
 	import { parseTop, parseExpr } from '../lib/io';
+	import { tokenize } from '$lib/io2';
 	import Block from '../lib/block.svelte';
+	import { stringify } from 'postcss';
 	let input = `2 <+> (3)
 
 λ3 (
@@ -107,7 +109,7 @@
 
 					text-wrap
 					{input ? '' : 'text-indigo-200'}
-					">{input ? parseExpr(input) : 'λ code comes out'}</pre>
+					">{input ? JSON.stringify(tokenize(input), null, 2) : 'λ code comes out'}</pre>
 			</div>
 		</div>
 	</div>
