@@ -86,7 +86,7 @@
 					placeholder:text-indigo-200
 					"
 				></textarea>
-				<div
+				<!-- <div
 					class="
 					flex-1
 					bg-indigo-100
@@ -99,8 +99,8 @@
 					"
 				>
 					<Main {input} />
-				</div>
-				<!-- <pre
+				</div> -->
+				<pre
 					class="
 					flex-1
 					bg-indigo-100
@@ -110,7 +110,7 @@
 
 					text-wrap
 					{input ? '' : 'text-indigo-200'}
-					">{input ? ioError(input) : 'λ code comes out'}</pre> -->
+					">{input ? ioError(input) : 'λ code comes out'}</pre>
 			</div>
 		</div>
 	</div>

@@ -1,5 +1,5 @@
 import { type Expr, type Term, TermKind, type error } from './types';
-import { print } from './utils';
+import { print, indent } from './utils';
 
 export function expresserize(terms: Term[]): Expr | error {
 	const term = terms.pop();
@@ -39,5 +39,26 @@ export function expresserize(terms: Term[]): Expr | error {
 		}
 	} else {
 		return `Expr - Terms list is empty`;
+	}
+}
+
+export function showExpression(expr: Expr): string {
+	switch (expr.kind) {
+		case TermKind.Var:
+			return expr.value;
+		case TermKind.Bind:
+			return `${showExpression(expr.context)}\nλ${expr.value}`;
+		case TermKind.Apply:
+			if (expr.value.kind === TermKind.Var) {
+				return `${showExpression(expr.context)}\n(${showExpression(expr.value)})`;
+			} else {
+				return `${showExpression(expr.context)}\n(\n${indent(showExpression(expr.value))}\n)`;
+			}
+		case TermKind.Inject:
+			if (expr.value.kind === TermKind.Var) {
+				return `${showExpression(expr.context)}\n<${showExpression(expr.value)}>`;
+			} else {
+				return `${showExpression(expr.context)}\n<\n${indent(showExpression(expr.value))}\n>`;
+			}
 	}
 }

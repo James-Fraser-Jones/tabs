@@ -9,3 +9,10 @@ export function strip(input: string): string {
 		.map((line) => line.trimEnd())
 		.join('\n');
 }
+
+export function indent(input: string): string {
+	return input
+		.split('\n')
+		.map((line) => '    '.concat(line))
+		.join('\n');
+}
