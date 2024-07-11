@@ -43,22 +43,20 @@ export function parseExpr(terms: Term[]): Expr | error {
 }
 
 export function printExpr(expr: Expr): string {
-	switch (expr.kind) {
-		case TermKind.Var:
-			return expr.value;
-		case TermKind.Bind:
-			return `${printExpr(expr.context)}\nλ${expr.value}`;
-		case TermKind.Apply:
-			if (expr.value.kind === TermKind.Var) {
-				return `${printExpr(expr.context)}\n(${printExpr(expr.value)})`;
-			} else {
-				return `${printExpr(expr.context)}\n(\n${indent(printExpr(expr.value))}\n)`;
+	if (expr.kind === TermKind.Var) {
+		return expr.value;
+	} else {
+		const context = `${printExpr(expr.context)}\n`;
+		if (expr.kind === TermKind.Bind) {
+			return `${context}λ${expr.value}`;
+		} else {
+			const left = expr.kind === TermKind.Apply ? '(' : '<';
+			const right = expr.kind === TermKind.Apply ? ')' : '>';
+			let body = printExpr(expr.value);
+			if (expr.value.kind !== TermKind.Var) {
+				body = `\n${indent(body)}\n`;
 			}
-		case TermKind.Inject:
-			if (expr.value.kind === TermKind.Var) {
-				return `${printExpr(expr.context)}\n<${printExpr(expr.value)}>`;
-			} else {
-				return `${printExpr(expr.context)}\n<\n${indent(printExpr(expr.value))}\n>`;
-			}
+			return `${context}${left}${body}${right}`;
+		}
 	}
 }

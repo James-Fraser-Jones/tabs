@@ -30,11 +30,11 @@
 )
 
 λ+1 (
-    n
-    (s)
-    (z)
-    <s>
-    λz λs λn
+    c
+    (succ)
+    (zero)
+    <succ>
+    λzero λsucc λc
 )
 
 λ0 (
@@ -80,6 +80,7 @@
 				class="
 				flex
 				min-h-full
+				divide-x-2
 				"
 			>
 				<textarea
@@ -91,8 +92,7 @@
 					bg-indigo-100
 					selection:text-indigo-100
 					border-indigo-900
-
-					border-r-1
+					
 					p-4
 					overflow-hidden
 					outline-none
@@ -106,8 +106,6 @@
 					bg-indigo-100
 					selection:text-indigo-100
 					border-indigo-900
-
-					border-l-1
 					"
 				>
 					<Main {input} />

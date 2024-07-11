@@ -1,4 +1,5 @@
 <script>
+	import Exprdiagram from './exprdiagram.svelte';
 	import Exprtext from './exprtext.svelte';
 	export let reduction;
 	let index = 0;
@@ -51,13 +52,16 @@
             rounded-lg
             w-20
             drop-shadow-lg
-            hover:drop-shadow-xl
-            active:bg-indigo-300
-            active:drop-shadow-none
+            enabled:hover:drop-shadow-xl
+            enabled:active:bg-indigo-300
+            enabled:active:drop-shadow-none
+			disabled:drop-shadow-none
+			disabled:border-indigo-300
+			disabled:text-indigo-400
             ">{'>'}</button
 		>
 	</div>
-	<div class="p-4">
-		<Exprtext expr={reduction[index]} />
+	<div class="p-4 flex justify-start">
+		<Exprdiagram expr={reduction[index]} />
 	</div>
 </div>

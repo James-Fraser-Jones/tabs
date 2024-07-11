@@ -1,7 +1,7 @@
 <script>
 	import Reduction from './reduction.svelte';
-	import { reduce } from '$lib/reduction';
+	import { calculateReduction } from '$lib/reduction';
 	export let expr;
 </script>
 
-<Reduction reduction={reduce(expr)} />
+<Reduction reduction={calculateReduction(expr)} />
