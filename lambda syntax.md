@@ -1021,3 +1021,66 @@ addtoleft a (Branch t1 t2) = ...
 ### You should instead allow whitespace to be included to right of _variables only_
 
 And you should eat (preserve) all the left-most whitespace of the entire document seperately
+
+# Capture avoiding substitution
+
+Consider the following expression:  
+`(uhoh -> (itsatrap -> uhoh -> itsatrap) uhoh captured!) saved!`
+
+```
+itsatrap
+λuhoh
+λitsatrap
+(uhoh)
+(captured!)
+λuhoh
+(saved!)
+```
+
+One reduction
+
+```
+itsatrap
+λuhoh
+λitsatrap
+(uhoh)
+(captured!)
+λuhoh
+(saved!)
+------
+uhoh
+λuhoh
+(captured!)
+λuhoh
+(saved!)
+------
+captured!
+λuhoh
+(saved!)
+------
+captured!
+```
+
+Another
+
+```
+itsatrap
+λuhoh
+λitsatrap
+(uhoh)
+(captured!)
+λuhoh
+(saved!)
+------
+itsatrap
+λuhoh
+λitsatrap
+(saved!)
+(captured!)
+------
+saved!
+λuhoh
+(captured!)
+------
+saved!
+```

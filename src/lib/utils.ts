@@ -1,4 +1,4 @@
-export function print(ob: object) {
+export function printObject(ob: object) {
 	return JSON.stringify(ob, null, 2);
 }
 

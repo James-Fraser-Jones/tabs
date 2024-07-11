@@ -1,12 +1,14 @@
 <script>
-	import { io } from '../lib/main';
+	import { parse } from '../lib/main';
 	import Expr from './expr.svelte';
 	export let input;
-	$: result = io(input);
+	$: expr = parse(input);
 </script>
 
-{#if typeof result === 'string'}
-	<p>Error: {result}</p>
+{#if typeof expr === 'string'}
+	<div class="p-4">
+		<span>Error: {expr}</span>
+	</div>
 {:else}
-	<Expr expr={result} />
+	<Expr {expr} />
 {/if}

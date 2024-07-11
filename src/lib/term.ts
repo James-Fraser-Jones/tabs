@@ -1,7 +1,7 @@
 import { type Token, Keyword, TokenKind, type error, TermKind, type Term } from './types';
-import { print } from './utils';
+import { printObject } from './utils';
 
-function makeTerms(
+function parseTermsScope(
 	[token, ...tokens]: Token[],
 	scope?: TermKind
 ): { terms: Term[]; tokens: Token[] } | error {
@@ -10,14 +10,14 @@ function makeTerms(
 	while (token) {
 		switch (token.kind) {
 			case TokenKind.Keyword:
+				if (bind) {
+					return `Term - Binder missing an identifier`;
+				}
 				switch (token.value) {
 					case Keyword.OpenBrace:
 					case Keyword.OpenAngle:
-						if (bind) {
-							return `Term - Binder missing an identifier`;
-						}
 						const openBrace = token.value === Keyword.OpenBrace;
-						const result = makeTerms(tokens, openBrace ? TermKind.Apply : TermKind.Inject);
+						const result = parseTermsScope(tokens, openBrace ? TermKind.Apply : TermKind.Inject);
 						if (typeof result === 'string') {
 							return result;
 						} else {
@@ -31,15 +31,12 @@ function makeTerms(
 					case Keyword.CloseBrace:
 					case Keyword.CloseAngle:
 						const closeBrace = token.value === Keyword.CloseBrace;
-						if (scope === (closeBrace ? TermKind.Apply : TermKind.Inject)) {
-							return { terms, tokens };
-						} else {
+						if (scope !== (closeBrace ? TermKind.Apply : TermKind.Inject)) {
 							return `Term - Unexpected closing brace: ${token.value}`;
+						} else {
+							return { terms, tokens };
 						}
 					case Keyword.Lambda:
-						if (bind) {
-							return `Term - Binder missing an identifier`;
-						}
 						bind = true;
 						break;
 				}
@@ -53,21 +50,22 @@ function makeTerms(
 		}
 		[token, ...tokens] = tokens;
 	}
-	if (scope) {
-		return `Term - Expected closing brace ${scope == TermKind.Apply ? ')' : '>'}`;
-	} else if (bind) {
+	if (bind) {
 		return `Term - Binder missing an identifier`;
+	}
+	if (scope !== undefined) {
+		return `Term - Expected closing brace ${scope == TermKind.Apply ? ')' : '>'}`;
 	} else {
 		return { terms, tokens };
 	}
 }
 
-export function termize(tokens: Token[]): Term[] | error {
-	const result = makeTerms(tokens);
+export function parseTerms(tokens: Token[]): Term[] | error {
+	const result = parseTermsScope(tokens);
 	if (typeof result === 'string') {
 		return result;
 	} else if (result.tokens.length > 0) {
-		return `Term - Extraneous tokens: ${print(result.tokens)}`;
+		return `Term - Extraneous tokens: ${printObject(result.tokens)}`;
 	} else {
 		return result.terms;
 	}

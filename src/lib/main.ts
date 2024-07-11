@@ -1,31 +1,16 @@
-import { tokenize } from './tokenizer';
-import { termize } from './termer';
+import { parseTokens } from './token';
+import { parseTerms } from './term';
 import { strip } from './utils';
-import { expresserize, showExpression } from './expresser';
-import { type Expr } from './types';
-import { normalise } from './evaluator';
+import { parseExpr } from './expr';
+import { type Expr, type error } from './types';
 
-export function io(input: string): Expr | string {
+export function parse(input: string): Expr | error {
 	const stripped = strip(input);
-	const tokens = tokenize(stripped);
-	const terms = termize(tokens);
+	const tokens = parseTokens(stripped);
+	const terms = parseTerms(tokens);
 	if (typeof terms === 'string') {
 		return terms;
 	} else {
-		const expr = expresserize(terms);
-		if (typeof expr === 'string') {
-			return expr;
-		} else {
-			return normalise(expr, 100);
-		}
-	}
-}
-
-export function ioError(input: string): string {
-	const result = io(input);
-	if (typeof result === 'string') {
-		return result;
-	} else {
-		return showExpression(result);
+		return parseExpr(terms);
 	}
 }

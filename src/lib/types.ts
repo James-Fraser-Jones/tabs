@@ -1,3 +1,9 @@
+//===========================================================================
+//Eval
+export type Reduction = Expr[];
+
+//===========================================================================
+//Expr
 export type Expr =
 	| { kind: TermKind.Var; value: string }
 	| { kind: TermKind.Bind; context: Expr; value: string }
@@ -5,7 +11,7 @@ export type Expr =
 	| { kind: TermKind.Inject; context: Expr; value: Expr };
 
 //===========================================================================
-
+//Term(s)
 export enum TermKind {
 	Var = 'VAR',
 	Bind = 'BIND',
@@ -19,7 +25,7 @@ export type Term =
 	| { kind: TermKind.Inject; value: Term[] };
 
 //===========================================================================
-
+//Token(s)
 export enum TokenKind {
 	Keyword = 'KEYWORD',
 	Whitespace = 'WHITESPACE',
@@ -46,5 +52,4 @@ export enum Whitespace {
 export const whitespace = Object.values(Whitespace).map((name) => name.toString());
 
 //===========================================================================
-
 export type error = string;

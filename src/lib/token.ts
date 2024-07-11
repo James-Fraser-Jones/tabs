@@ -1,6 +1,6 @@
 import { TokenKind, type Token, keyword, type Keyword, whitespace } from './types';
 
-function makeToken(char: string): Token {
+function parseTokenChar(char: string): Token {
 	if (keyword.includes(char)) {
 		return { kind: TokenKind.Keyword, value: char as Keyword };
 	} else if (whitespace.includes(char)) {
@@ -10,7 +10,7 @@ function makeToken(char: string): Token {
 	}
 }
 
-function mergeTokens(token1: Token, token2: Token): Token | undefined {
+function mergeTokenPair(token1: Token, token2: Token): Token | undefined {
 	if (token1.kind === TokenKind.Whitespace && token2.kind === TokenKind.Whitespace) {
 		return { kind: TokenKind.Whitespace, value: token1.value.concat(token2.value) };
 	} else if (token1.kind === TokenKind.Identifier && token2.kind === TokenKind.Identifier) {
@@ -19,20 +19,20 @@ function mergeTokens(token1: Token, token2: Token): Token | undefined {
 	return;
 }
 
-function mergeAllTokens(tokens: Token[]): Token[] {
+function mergeTokens(tokens: Token[]): Token[] {
 	if (tokens.length < 2) {
 		return tokens;
 	} else {
 		const [x, y, ...tail] = tokens;
-		const mergedToken = mergeTokens(x, y);
+		const mergedToken = mergeTokenPair(x, y);
 		if (mergedToken) {
-			return mergeAllTokens([mergedToken, ...tail]);
+			return mergeTokens([mergedToken, ...tail]);
 		} else {
-			return [x, ...mergeAllTokens([y, ...tail])];
+			return [x, ...mergeTokens([y, ...tail])];
 		}
 	}
 }
 
-export function tokenize(input: string): Token[] {
-	return mergeAllTokens([...input].map(makeToken));
+export function parseTokens(input: string): Token[] {
+	return mergeTokens([...input].map(parseTokenChar));
 }
