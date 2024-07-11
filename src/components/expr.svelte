@@ -1,4 +1,5 @@
 <script>
+	import ReductionAll from './reductionAll.svelte';
 	import Reduction from './reduction.svelte';
 	import { calculateReduction } from '$lib/reduction';
 	export let expr;
