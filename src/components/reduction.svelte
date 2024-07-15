@@ -62,6 +62,6 @@
 		>
 	</div>
 	<div class="p-4 flex justify-start">
-		<Exprdiagram expr={reduction[index]} />
+		<Exprtext expr={reduction[index]} />
 	</div>
 </div>
